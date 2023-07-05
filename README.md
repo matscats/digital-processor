@@ -10,5 +10,5 @@ Using VHDL program language, this project specifies the behavior of a seven inst
 | MOV Ra, #C      | RF[a] = c                      |  0011  |
 | SUB Ra, Rb, Rc  | RF[a] = RF[b] - RF[c]          |  0100  |
 | JMPZ Ra, offset | PC = PC + offset if RF[a] = 0  |  0101  |
-| JGT Ra, Rb, Rc  | PC = RC if RF[a] > RF[b]       |  0111  |
+| JGT Ra, Rb, Rc  | PC = RF[C] if RF[a] > RF[b]    |  0111  |
 
