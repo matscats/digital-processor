@@ -8,8 +8,9 @@ GENERIC(
 );
 PORT(
 	A, B : in std_logic_vector(SIZE-1 DOWNTO 0);
-	x, y, z : in std_logic;
-   S : out std_logic_vector(SIZE-1 DOWNTO 0)
+	x, y : in std_logic;
+   S : out std_logic_vector(SIZE-1 DOWNTO 0);
+	gt, eq : out std_logic
 );
 END;
 
@@ -39,14 +40,14 @@ END COMPONENT;
 
 COMPONENT abext IS
 PORT(
-	a, b, x, y, z : in std_logic;
+	a, b, x, y : in std_logic;
 	sa, sb : out std_logic
 );
 END COMPONENT;
 
 COMPONENT cinext IS
 PORT(
-	x, y, z : in std_logic;
+	x, y : in std_logic;
 	cin : out std_logic
 );
 END COMPONENT;
@@ -56,10 +57,11 @@ SIGNAL cinaux : std_logic;
 
 BEGIN
 	extensorAB : for i in 0 to SIZE-1 generate
-		AB : abext PORT MAP (a => A(i), b => B(i), x => x, y => y, z => z, sa => Aaux(i), sb => Baux(i));
+		AB : abext PORT MAP (a => A(i), b => B(i), x => x, y => y, sa => Aaux(i), sb => Baux(i));
 	end generate extensorAB;
 	
-	extensorCin : cinext PORT MAP (x => x, y => y, z => z, cin => cinaux);
+	extensorCin : cinext PORT MAP (x => x, y => y, cin => cinaux);
 	soma : somador GENERIC MAP (SIZE => SIZE) PORT MAP (A => Aaux, B => Baux, C => S, ci => cinaux);
+	comp : compNbit GENERIC MAP (SIZE => SIZE, UNSIGNopt => UNSIGNopt) PORT MAP (A => A, B => B, s_gt => gt, s_eq => eq);
 	
 END;
