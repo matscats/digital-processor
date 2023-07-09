@@ -8,6 +8,10 @@ GENERIC(
 );
 PORT(
 	A, B : in std_logic_vector(SIZE-1 DOWNTO 0);
+	--00 : SUM;
+	--01 : SHOW A;
+	--10 : SUBTRACT;
+	--11 : UNUSED;
 	x, y : in std_logic;
    S : out std_logic_vector(SIZE-1 DOWNTO 0);
 	gt, eq : out std_logic
