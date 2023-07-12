@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity InstructionMemory is
     generic (
-        N : natural := 8; -- Número de bits para endereçamento
+        N : natural := 16; -- Número de bits para endereçamento
         M : natural := 16 -- Número de bits para dados
     );
     port (
@@ -16,7 +16,7 @@ entity InstructionMemory is
 end entity InstructionMemory;
 
 architecture Behavioral of InstructionMemory is
-    type MemoryArray is array (natural range <>) of std_logic_vector(M-1 downto 0);
+    type MemoryArray is array ((2**N)-1 DOWNTO 0) of std_logic_vector(M-1 downto 0);
     constant Instructions : MemoryArray := (
         0 => "0000000000000000", -- Instrução 0
         1 => "1111111111111111", -- Instrução 1

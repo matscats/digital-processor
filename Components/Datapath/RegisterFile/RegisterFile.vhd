@@ -4,7 +4,7 @@ USE work.utils.all;
 
 ENTITY RegisterFile IS
 GENERIC(
-	M_addrSIZE : INTEGER := SSIZE;
+	M_addrSIZE : INTEGER := (2**SSIZE);
 	regSIZE : INTEGER := BSIZE
 );
 PORT(
@@ -54,15 +54,15 @@ SIGNAL regP, regQ : STD_LOGIC_VECTOR(regSIZE-1 DOWNTO 0);
 
 BEGIN
 
-	rfLoop : for i in 0 to (2**M_addrSIZE)-1 generate
+	rfLoop : for i in 0 to M_addrSIZE-1 generate
 		regf : regNbit GENERIC MAP(SIZE => regSIZE) PORT MAP (I => Wdata, clk => clk, clear => '0', ld => regLoad(i), S => RF(i));
 	end generate rfLoop;
 	
 	--read (it is possible to loop it for N heads with a vecArray signal to represent all 'out' registers)
 	--this won't behave as the 3 state driver one, but it stills counts as a 
-	muxp: muxKx1comp1bit GENERIC MAP(SSIZE => M_addrSIZE) PORT MAP (I => RF, sel => RPaddr, S => regP);
+	muxp: muxKx1comp1bit GENERIC MAP(SSIZE => SSIZE) PORT MAP (I => RF, sel => RPaddr, S => regP);
 	rp : regNbit GENERIC MAP (SIZE => regSIZE) PORT MAP (I => regP, clk => clk, clear => '0', ld => RenP, S => RPdata);
-	muxq: muxKx1comp1bit GENERIC MAP(SSIZE => M_addrSIZE) PORT MAP (I => RF, sel => RQaddr, S => regQ);
+	muxq: muxKx1comp1bit GENERIC MAP(SSIZE => SSIZE) PORT MAP (I => RF, sel => RQaddr, S => regQ);
 	rq : regNbit GENERIC MAP (SIZE => regSIZE) PORT MAP (I => regQ, clk => clk, clear => '0', ld => RenQ, S => RQdata);
 	
 	--write
