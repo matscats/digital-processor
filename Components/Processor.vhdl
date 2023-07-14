@@ -14,8 +14,11 @@ GENERIC(
 );
 port (
 	clk, reset : in std_logic;
-	exampleOut : OUT STD_LOGIC_VECTOR (regSIZE-1 DOWNTO 0)
-
+	exampleOut : OUT STD_LOGIC_VECTOR (regSIZE-1 DOWNTO 0);
+	I_data : out std_logic_vector(IR_WIDTH-1 downto 0);
+	ALU_Sel : out std_logic_vector(1 DOWNTO 0);
+	RF_Waddr, RF_RPaddr : out std_logic_vector(3 DOWNTO 0);
+	RF_gt, I_rd : out std_logic
 );
 end entity Processor;
 
@@ -94,9 +97,14 @@ SIGNAL RF_W_addr_o, RF_Rp_addr_o, RF_Rq_addr_o : std_logic_vector(3 DOWNTO 0);
 SIGNAL I_data_o : std_logic_vector(IR_WIDTH-1 downto 0);
 SIGNAL D_data_o : std_logic_vector(regSIZE-1 downto 0);
 begin
-
-	IMEM : InstructionMemory port map (CLK => CLK, RD => I_rd_o, ADDR => I_addr_o, DATA => I_data_o);
-	DMEM : RAM port map (CLK => clk, ADDR => D_addr_o, RD => D_rd_o, WR => D_wr_o, W_DATA => W_data_o, R_DATA => D_data_o);
+	
+	exampleOut <= W_data_o;
+	I_data <= I_data_o;
+	ALU_Sel <= ALU_Sel_o;
+	RF_Waddr <= RF_W_addr_o;
+	RF_RPaddr <= RF_Rp_addr_o;
+	RF_gt <= cmp_gt_o;
+	I_rd <= I_rd_o;
 	
 	ControlU : ControlUnit port map (clk => clk, reset => reset, RF_RP_zero => RF_RP_zero_o, cmp_gt => cmp_gt_o,
 	I_data => I_data_o, PC_set => W_data_o, I_rd => I_rd_o, D_rd => D_rd_o, D_wr => D_wr_o, RF_W_Wen => RF_W_Wen_o,
@@ -108,5 +116,7 @@ begin
 	ALU_Sel => ALU_Sel_o, RF_Waddr => RF_W_addr_o, RF_RPaddr => RF_Rp_addr_o, RF_RQaddr => RF_Rq_addr_o, RF_Wen => RF_W_Wen_o,
 	RF_RenP => RF_RP_Ren_o, RF_RenQ => RF_RQ_Ren_o, clk => clk, W_data => W_data_o, RF_Rp_zero => RF_RP_zero_o, RF_gt => cmp_gt_o);
 
-	exampleOut <= D_data_o;
+	IMEM : InstructionMemory port map (CLK => CLK, RD => I_rd_o, ADDR => I_addr_o, DATA => I_data_o);
+	DMEM : RAM port map (CLK => clk, ADDR => D_addr_o, RD => D_rd_o, WR => D_wr_o, W_DATA => W_data_o, R_DATA => D_data_o);
+	
 end architecture main;
