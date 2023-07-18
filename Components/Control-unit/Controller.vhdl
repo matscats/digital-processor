@@ -9,7 +9,8 @@ port(
 	IR03, IR47, IR811, OPCODE : in std_logic_vector(3 DOWNTO 0);
 	RF_RP_zero, cmp_gt : in std_logic;
 	PC_ld, PC_clr, PC_inc, i_rd, IR_ld, D_rd, D_wr, RF_W_wr, RF_s1,
-	RF_s0, RF_Rp_rd, RF_Rq_rd, alu_s1, alu_s0 : out std_logic;
+	RF_s0, RF_Rp_rd, RF_Rq_rd, alu_s1, alu_s0, PC_sel
+	: out std_logic;
 	D_addr03, D_addr47, RF_W_data03, RF_W_data47, RF_W_addr, RF_Rp_addr,
 	RF_Rq_addr : out std_logic_vector(3 DOWNTO 0)
 );
@@ -54,6 +55,7 @@ begin
 				RF_Rq_rd <= '0';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				nextState <= Fetch;
 			when Fetch =>
 				PC_ld <= '0';
@@ -77,6 +79,7 @@ begin
 				RF_Rq_rd <= '0';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				nextState <= Decode;
 			when Decode =>
 				PC_ld <= '0';
@@ -100,6 +103,7 @@ begin
 				RF_Rq_rd <= '0';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				if (OPCODE = "0000") then
 					nextState <= Load;
 				elsif (OPCODE = "0001") then
@@ -139,6 +143,7 @@ begin
 				RF_Rq_rd <= '0';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				nextState <= Fetch;
 			when Store =>
 				PC_ld <= '0';
@@ -162,6 +167,7 @@ begin
 				RF_Rq_rd <= '0';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				nextState <= Fetch;
 			when Add =>
 				PC_ld <= '0';
@@ -185,6 +191,7 @@ begin
 				RF_Rq_rd <= '1';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				nextState <= Fetch;
 			when LoadConst =>
 				PC_ld <= '0';
@@ -208,6 +215,7 @@ begin
 				RF_Rq_rd <= '0';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				nextState <= Fetch;
 			when Subtract =>
 				PC_ld <= '0';
@@ -231,6 +239,7 @@ begin
 				RF_Rq_rd <= '1';
 				alu_s1 <= '1';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				nextState <= Fetch;
 			when JumpIfZero =>
 				PC_ld <= '0';
@@ -254,6 +263,7 @@ begin
 				RF_Rq_rd <= '0';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				if (RF_RP_zero = '0') then
 					nextState <= Fetch;
 				else
@@ -281,6 +291,7 @@ begin
 				RF_Rq_rd <= '0';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				nextState <= Fetch;
 			when JumpIfGt =>
 				PC_ld <= '0';
@@ -300,10 +311,11 @@ begin
 				RF_s0 <= '0';
 				RF_Rp_addr <= IR811;
 				RF_Rp_rd <= '1';
-				RF_Rq_addr <= "0000";
-				RF_Rq_rd <= '0';
+				RF_Rq_addr <= IR47;
+				RF_Rq_rd <= '1';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '0';
 				if (cmp_gt = '0') then
 					nextState <= Fetch;
 				else
@@ -325,12 +337,13 @@ begin
 				RF_W_addr <= "0000";
 				RF_s1 <= '0';
 				RF_s0 <= '0';
-				RF_Rp_addr <= "0000";
-				RF_Rp_rd <= '0';
+				RF_Rp_addr <= IR03;
+				RF_Rp_rd <= '1';
 				RF_Rq_addr <= "0000";
 				RF_Rq_rd <= '0';
 				alu_s1 <= '0';
 				alu_s0 <= '0';
+				PC_sel <= '1';
 				nextState <= Fetch;
 		end case;
 	end process;
