@@ -4,7 +4,7 @@ USE work.utils.all;
 
 ENTITY RegisterFile IS
 GENERIC(
-	M_addrSIZE : INTEGER := (2**SSIZE);
+	M_addrSIZE : INTEGER := (SSIZE);
 	regSIZE : INTEGER := BSIZE
 );
 PORT(

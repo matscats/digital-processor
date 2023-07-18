@@ -18,7 +18,7 @@ end entity InstructionMemory;
 architecture Behavioral of InstructionMemory is
     type MemoryArray is array ((2**N)-1 DOWNTO 0) of std_logic_vector(M-1 downto 0);
     constant Instructions : MemoryArray := (
-		  0 => "0011000000100001",-- instrução 0
+		  0 => "0011000000000001",-- instrução 0
 		  1 => "0011000100000010",-- instrução 1
 		  2 => "0011001000000101",
 		  3 => "0110000100000010",
