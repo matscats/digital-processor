@@ -23,7 +23,7 @@ architecture Behavioral of InstructionMemory is
 		  2 => "0011001000000101",
 		  3 => "0110000100000010",
 		  4 => "0010000100000011",
-		  5 => "0100000100000011",
+		  5 => "0100001100010000",
 		  
         -- Adicione mais instruções conforme necessário.
         -- Aqui devemos fazer hard coded pra simular o código em assembly.

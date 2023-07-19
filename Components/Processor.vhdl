@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.utils.all;
-
+--altProcessor's been giving me (Marcos) less headaches
 entity Processor is
 GENERIC(
 	--almost every size variable happened to be the same size lol
@@ -116,7 +116,9 @@ begin
 	ALU_Sel => ALU_Sel_o, RF_Waddr => RF_W_addr_o, RF_RPaddr => RF_Rp_addr_o, RF_RQaddr => RF_Rq_addr_o, RF_Wen => RF_W_Wen_o,
 	RF_RenP => RF_RP_Ren_o, RF_RenQ => RF_RQ_Ren_o, clk => clk, W_data => W_data_o, RF_Rp_zero => RF_RP_zero_o, RF_gt => cmp_gt_o);
 
-	IMEM : InstructionMemory port map (CLK => CLK, RD => I_rd_o, ADDR => I_addr_o, DATA => I_data_o);
+	--faking a (2^4)x16 as a (2^16)x16 'cause tis too heavy for my pc to compile/simulate
+	IMEM : InstructionMemory GENERIC MAP (N => 4) port map (CLK => NOT clk, RD => I_rd_o, ADDR => I_addr_o(3 DOWNTO 0),
+	DATA => I_data_o);
 	DMEM : RAM port map (CLK => clk, ADDR => D_addr_o, RD => D_rd_o, WR => D_wr_o, W_DATA => W_data_o, R_DATA => D_data_o);
 	
 end architecture main;

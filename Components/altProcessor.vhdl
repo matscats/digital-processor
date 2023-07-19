@@ -17,8 +17,8 @@ port (
 	exampleOut : OUT STD_LOGIC_VECTOR (regSIZE-1 DOWNTO 0);
 	ex_RF_W_addr : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
 	--in case the sole existence of the IM keeps making the ControlUnit delay it's output for the datapath in 3 clk cycles
-	I_data : in std_logic_vector(IR_WIDTH-1 downto 0);
-	--I_data : out std_logic_vector(IR_WIDTH-1 downto 0);
+	--I_data : in std_logic_vector(IR_WIDTH-1 downto 0);
+	I_data : out std_logic_vector(IR_WIDTH-1 downto 0);
 	I_addr : out std_logic_vector(PC_WIDTH-1 downto 0);
 	I_rd : out std_logic
 );
@@ -104,13 +104,14 @@ begin
 	I_rd <= I_rd_o;
 	I_addr <= I_addr_o;
 	--changes wheter I_data is an input or output
-	--I_data <= I_data_o;
-	I_data_o <= I_data;
+	I_data <= I_data_o;
+	--I_data_o <= I_data;
 
 	--faking a (2^4)x16 as a (2^16)x16 'cause tis too heavy for my pc to compile/simulate
-	--IMEM : InstructionMemory GENERIC MAP (N => 4) port map (CLK => CLK, RD => I_rd_o, ADDR => I_addr_o(3 DOWNTO 0),
+	IMEM : InstructionMemory GENERIC MAP (N => 4) port map (CLK => NOT clk, RD => I_rd_o, ADDR => I_addr_o(3 DOWNTO 0),
 	--IMEM : altInstructionMemory GENERIC MAP (M_addrSIZE => 4) port map (CLK => CLK, RD => I_rd_o, ADDR => I_addr_o(3 DOWNTO 0),
-	--DATA => I_data_o);
+	DATA => I_data_o);
+	
 	DMEM : RAM port map (CLK => clk, ADDR => D_addr_o, RD => D_rd_o, WR => D_wr_o, W_DATA => W_data_o, R_DATA => D_data_o);
 	
 end architecture main;
