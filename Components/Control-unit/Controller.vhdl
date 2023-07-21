@@ -30,7 +30,7 @@ begin
 		end if;
 	end process;
 
-	process (OPCODE, IR03, IR47, IR811, RF_RP_zero, cmp_gt)
+	process (OPCODE, IR03, IR47, IR811, RF_RP_zero, cmp_gt, stateReg)
 	begin
 		case stateReg is
 			when Init =>
